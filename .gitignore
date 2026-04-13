@@ -1,0 +1,8 @@
+# Secrets and local overrides — never commit real tokens
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.venv/
+venv/

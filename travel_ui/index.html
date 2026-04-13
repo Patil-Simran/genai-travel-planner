@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Travel planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep: #070a0f;
+      --bg-mid: #0d1219;
+      --surface: rgba(22, 30, 45, 0.65);
+      --surface-solid: #121a28;
+      --text: #f0f4fa;
+      --muted: #8a9bb8;
+      --accent: #5b9cff;
+      --accent-hot: #7ec8ff;
+      --glow: rgba(91, 156, 255, 0.35);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --err: #ff8a8a;
+      --success: #7dffb3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Outfit", system-ui, sans-serif;
+      color: var(--text);
+      line-height: 1.55;
+      background: var(--bg-deep);
+      background-image:
+        radial-gradient(ellipse 120% 80% at 50% -30%, rgba(91, 156, 255, 0.22), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 100% 0%, rgba(125, 200, 255, 0.12), transparent 45%),
+        radial-gradient(ellipse 60% 40% at 0% 100%, rgba(139, 92, 246, 0.08), transparent 50%),
+        linear-gradient(180deg, var(--bg-mid) 0%, var(--bg-deep) 100%);
+      background-attachment: fixed;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: clamp(1.5rem, 4vw, 2.75rem) clamp(1rem, 4vw, 1.5rem) 3.5rem;
+    }
+
+    .kicker {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-hot);
+      margin: 0 0 0.5rem;
+      opacity: 0.95;
+    }
+
+    h1 {
+      font-size: clamp(1.75rem, 4.5vw, 2.25rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin: 0 0 0.65rem;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #fff 0%, #c5d8f0 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 400;
+      margin: 0 0 1.75rem;
+      max-width: 32rem;
+    }
+
+    .card {
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.35rem 1.35rem 1.5rem;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+        0 24px 48px -24px rgba(0, 0, 0, 0.55);
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 7.5rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      background: rgba(7, 10, 15, 0.45);
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    textarea::placeholder {
+      color: rgba(138, 155, 184, 0.55);
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: rgba(91, 156, 255, 0.55);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.15rem;
+    }
+
+    button {
+      position: relative;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #0a0e14;
+      border: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: 12px;
+      cursor: pointer;
+      background: linear-gradient(145deg, var(--accent-hot) 0%, var(--accent) 100%);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.25) inset,
+        0 8px 24px -8px var(--glow);
+      transition: transform 0.15s ease, box-shadow 0.2s, filter 0.2s;
+    }
+
+    button:hover:not(:disabled) {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.3) inset,
+        0 12px 32px -10px var(--glow);
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+      filter: grayscale(0.2);
+    }
+
+    .meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      min-height: 1.25em;
+    }
+
+    .meta.loading {
+      background: linear-gradient(90deg, var(--muted), var(--accent-hot), var(--muted));
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 1.2s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 100% 50%; }
+      100% { background-position: -100% 50%; }
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 1.1rem;
+      min-height: 0;
+    }
+
+    .chip {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(91, 156, 255, 0.1);
+      border: 1px solid rgba(91, 156, 255, 0.22);
+      color: #b8d4ff;
+    }
+
+    .chip strong {
+      font-weight: 600;
+      color: #e8f2ff;
+    }
+
+    .out-wrap {
+      margin-top: 1.5rem;
+    }
+
+    .out-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .out {
+      padding: 1.25rem 1.35rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(7, 10, 15, 0.5);
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 5rem;
+      font-size: 0.95rem;
+      color: #dce5f2;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+      transition: border-color 0.2s;
+    }
+
+    .out.error {
+      color: var(--err);
+      border-color: rgba(248, 113, 113, 0.35);
+      background: rgba(40, 15, 15, 0.35);
+    }
+
+    .out:not(:empty):not(.error) {
+      border-color: rgba(91, 156, 255, 0.2);
+    }
+
+    .out.it-html {
+      white-space: normal;
+    }
+
+    .out.it-html .it-line {
+      margin: 0.35rem 0;
+      line-height: 1.55;
+    }
+
+    .out.it-html .it-line.it-em {
+      font-weight: 600;
+      color: #f2f6fc;
+      margin-top: 0.85rem;
+    }
+
+    .out.it-html .it-line.it-em:first-child {
+      margin-top: 0;
+    }
+
+    .label-spaced {
+      margin-top: 1rem;
+    }
+
+    .textarea-secondary {
+      min-height: 4.5rem;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <p class="kicker">Itineraries</p>
+    <h1>Plan your next trip</h1>
+    <p class="sub">Describe where you’re going and how long you’ll stay — you’ll get a structured day-by-day outline with ideas for food and sights.</p>
+
+    <div class="card">
+      <label for="q">Trip (place, days, transport)</label>
+      <textarea id="q" placeholder="e.g. Four days in Lisbon by train — historic quarters, tiles, and local food"></textarea>
+      <label for="opts" class="label-spaced">Options (optional)</label>
+      <textarea id="opts" class="textarea-secondary" placeholder="Budget, kids, dietary needs, pace, must-sees, accessibility — anything else"></textarea>
+      <div class="actions">
+        <button type="button" id="go">Generate itinerary</button>
+        <span class="meta" id="status"></span>
+      </div>
+    </div>
+
+    <div id="chips" class="chips" aria-live="polite"></div>
+
+    <div class="out-wrap">
+      <div class="out-label" id="outLabel" hidden>Your itinerary</div>
+      <div id="out" class="out" aria-live="polite"></div>
+    </div>
+  </div>
+  <script>
+    const q = document.getElementById("q");
+    const opts = document.getElementById("opts");
+    const go = document.getElementById("go");
+    const out = document.getElementById("out");
+    const statusEl = document.getElementById("status");
+    const chips = document.getElementById("chips");
+    const outLabel = document.getElementById("outLabel");
+
+    async function run() {
+      const query = q.value.trim();
+      const options = opts.value.trim();
+      if (!query && !options) {
+        outLabel.hidden = true;
+        out.className = "out error";
+        out.innerHTML = "";
+        out.textContent = "Enter a trip description and/or options (e.g. place and days in either box).";
+        return;
+      }
+      go.disabled = true;
+      out.className = "out";
+      out.textContent = "";
+      out.innerHTML = "";
+      outLabel.hidden = true;
+      chips.innerHTML = "";
+      statusEl.className = "meta loading";
+      statusEl.textContent = "Crafting your itinerary…";
+      try {
+        const res = await fetch("/api/plan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, options }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.detail || res.statusText || "Request failed");
+        }
+        statusEl.className = "meta";
+        statusEl.textContent = "Ready";
+        statusEl.style.color = "var(--success)";
+        setTimeout(() => {
+          statusEl.textContent = "";
+          statusEl.style.color = "";
+        }, 2200);
+        if (data.destination) {
+          chips.innerHTML =
+            '<span class="chip"><strong>Place</strong> ' + escapeHtml(data.destination) + "</span>" +
+            '<span class="chip"><strong>Days</strong> ' + escapeHtml(String(data.days)) + "</span>" +
+            '<span class="chip"><strong>Transport</strong> ' + escapeHtml(data.transport || "—") + "</span>" +
+            '<span class="chip"><strong>Model</strong> ' + escapeHtml(data.model_id || "—") + "</span>";
+        }
+        const body = data.response || "(empty response)";
+        out.className = "out it-html";
+        out.innerHTML = formatItineraryHtml(body);
+        outLabel.hidden = false;
+      } catch (e) {
+        statusEl.className = "meta";
+        statusEl.textContent = "";
+        outLabel.hidden = true;
+        out.className = "out error";
+        out.innerHTML = "";
+        out.textContent = e.message || String(e);
+      } finally {
+        go.disabled = false;
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function formatItineraryHtml(plain) {
+      const lines = String(plain).split("\n");
+      return lines
+        .map((line) => {
+          const t = line.trim();
+          if (!t) return "<br />";
+          const esc = escapeHtml(line);
+          const em =
+            /^day\s+\d+/i.test(t) ||
+            /^morning\b/i.test(t) ||
+            /^afternoon\b/i.test(t) ||
+            /^evening\b/i.test(t) ||
+            /^•\s/.test(t);
+          const cls = em ? ' class="it-line it-em"' : ' class="it-line"';
+          return "<p" + cls + ">" + esc + "</p>";
+        })
+        .join("");
+    }
+
+    go.addEventListener("click", run);
+    function onEnterSubmit(ev) {
+      if (ev.key === "Enter" && !ev.shiftKey) {
+        ev.preventDefault();
+        run();
+      }
+    }
+    q.addEventListener("keydown", onEnterSubmit);
+    opts.addEventListener("keydown", onEnterSubmit);
+  </script>
+</body>
+</html>
