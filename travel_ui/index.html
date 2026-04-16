@@ -22,6 +22,7 @@
       --border-strong: rgba(255, 255, 255, 0.14);
       --err: #ff8a8a;
       --success: #7dffb3;
+      --warn: #ffd97d;
     }
 
     * { box-sizing: border-box; }
@@ -84,10 +85,52 @@
       color: var(--muted);
       font-size: 1rem;
       font-weight: 400;
-      margin: 0 0 1.75rem;
+      margin: 0 0 1rem;
       max-width: 32rem;
     }
 
+    /* ── 11. Example prompt chips ─────────────────────────────────────────── */
+    .example-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .example-row-label {
+      width: 100%;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .ex-chip {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.38rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(91, 156, 255, 0.08);
+      border: 1px solid rgba(91, 156, 255, 0.25);
+      color: #b8d4ff;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      user-select: none;
+    }
+
+    .ex-chip:hover {
+      background: rgba(91, 156, 255, 0.18);
+      border-color: rgba(91, 156, 255, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .ex-chip:active {
+      transform: translateY(0);
+    }
+
+    /* ── Card ─────────────────────────────────────────────────────────────── */
     .card {
       background: var(--surface);
       backdrop-filter: blur(20px);
@@ -122,9 +165,7 @@
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    textarea::placeholder {
-      color: rgba(138, 155, 184, 0.55);
-    }
+    textarea::placeholder { color: rgba(138, 155, 184, 0.55); }
 
     textarea:focus {
       outline: none;
@@ -161,20 +202,39 @@
     button:hover:not(:disabled) {
       filter: brightness(1.06);
       transform: translateY(-1px);
-      box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.3) inset,
-        0 12px 32px -10px var(--glow);
     }
 
-    button:active:not(:disabled) {
-      transform: translateY(0);
-    }
+    button:active:not(:disabled) { transform: translateY(0); }
 
     button:disabled {
       opacity: 0.55;
       cursor: not-allowed;
       transform: none;
       filter: grayscale(0.2);
+    }
+
+    /* ── 9. Copy button (ghost style) ──────────────────────────────────────── */
+    .btn-ghost {
+      background: rgba(91, 156, 255, 0.1);
+      color: var(--accent-hot);
+      border: 1px solid rgba(91, 156, 255, 0.3);
+      box-shadow: none;
+      font-size: 0.82rem;
+      padding: 0.45rem 1rem;
+      border-radius: 10px;
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      background: rgba(91, 156, 255, 0.2);
+      border-color: rgba(91, 156, 255, 0.5);
+      filter: none;
+      transform: none;
+    }
+
+    .btn-ghost.copied {
+      color: var(--success);
+      border-color: rgba(125, 255, 179, 0.4);
+      background: rgba(125, 255, 179, 0.07);
     }
 
     .meta {
@@ -193,10 +253,11 @@
     }
 
     @keyframes shimmer {
-      0% { background-position: 100% 50%; }
+      0%   { background-position: 100% 50%; }
       100% { background-position: -100% 50%; }
     }
 
+    /* ── Info chips (destination / days / transport / model) ─────────────── */
     .chips {
       display: flex;
       flex-wrap: wrap;
@@ -221,8 +282,30 @@
       color: #e8f2ff;
     }
 
-    .out-wrap {
-      margin-top: 1.5rem;
+    /* ── Weather banner ───────────────────────────────────────────────────── */
+    .weather-banner {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 1rem;
+      padding: 0.65rem 1rem;
+      border-radius: 12px;
+      background: rgba(255, 217, 125, 0.07);
+      border: 1px solid rgba(255, 217, 125, 0.2);
+      color: var(--warn);
+      font-size: 0.88rem;
+    }
+
+    .weather-banner .wi { font-size: 1.1rem; }
+
+    /* ── Output sections ──────────────────────────────────────────────────── */
+    .out-wrap { margin-top: 1.5rem; }
+
+    .out-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
     }
 
     .out-label {
@@ -231,7 +314,6 @@
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 0.5rem;
     }
 
     .out {
@@ -258,9 +340,7 @@
       border-color: rgba(91, 156, 255, 0.2);
     }
 
-    .out.it-html {
-      white-space: normal;
-    }
+    .out.it-html { white-space: normal; }
 
     .out.it-html .it-line {
       margin: 0.35rem 0;
@@ -273,25 +353,39 @@
       margin-top: 0.85rem;
     }
 
-    .out.it-html .it-line.it-em:first-child {
-      margin-top: 0;
+    .out.it-html .it-line.it-em:first-child { margin-top: 0; }
+
+    /* Budget section */
+    .budget-wrap {
+      margin-top: 1.25rem;
     }
 
-    .label-spaced {
-      margin-top: 1rem;
+    .budget-out {
+      border-color: rgba(125, 255, 179, 0.15) !important;
+      background: rgba(5, 20, 12, 0.45) !important;
+      color: #c2f0d8 !important;
     }
 
-    .textarea-secondary {
-      min-height: 4.5rem;
-    }
-
+    .label-spaced { margin-top: 1rem; }
+    .textarea-secondary { min-height: 4.5rem; }
   </style>
 </head>
 <body>
   <div class="shell">
     <p class="kicker">Itineraries</p>
     <h1>Plan your next trip</h1>
-    <p class="sub">Describe where you’re going and how long you’ll stay — you’ll get a structured day-by-day outline with ideas for food and sights.</p>
+    <p class="sub">Describe where you're going and how long you'll stay — you'll get a day-by-day plan, weather forecast, and budget estimate.</p>
+
+    <!-- 11. Example prompt chips -->
+    <div class="example-row" id="exampleRow">
+      <span class="example-row-label">Try an example</span>
+      <span class="ex-chip" data-q="5 days in Tokyo by train" data-o="">Tokyo 5d 🚄</span>
+      <span class="ex-chip" data-q="3 days in Goa by flight" data-o="">Goa 3d ✈️</span>
+      <span class="ex-chip" data-q="7 days in Paris" data-o="Budget trip, vegetarian food">Paris 7d 🗼</span>
+      <span class="ex-chip" data-q="4 days in Rajasthan by train" data-o="Heritage sites, local cuisine">Rajasthan 4d 🏰</span>
+      <span class="ex-chip" data-q="Weekend trip to Coorg" data-o="Nature, coffee estates">Coorg Weekend 🌿</span>
+      <span class="ex-chip" data-q="10 days in Thailand by flight" data-o="Beaches, temples, street food">Thailand 10d 🏖️</span>
+    </div>
 
     <div class="card">
       <label for="q">Trip (place, days, transport)</label>
@@ -306,76 +400,185 @@
 
     <div id="chips" class="chips" aria-live="polite"></div>
 
-    <div class="out-wrap">
-      <div class="out-label" id="outLabel" hidden>Your itinerary</div>
+    <!-- Weather banner -->
+    <div id="weatherBanner" class="weather-banner" style="display:none" aria-live="polite">
+      <span class="wi">🌤</span>
+      <span id="weatherText"></span>
+    </div>
+
+    <!-- Itinerary output -->
+    <div class="out-wrap" id="itineraryWrap" style="display:none">
+      <div class="out-header">
+        <div class="out-label">Your itinerary</div>
+        <!-- 9. Copy to clipboard button -->
+        <button type="button" class="btn-ghost" id="copyBtn">Copy plan</button>
+      </div>
       <div id="out" class="out" aria-live="polite"></div>
     </div>
-  </div>
-  <script>
-    const q = document.getElementById("q");
-    const opts = document.getElementById("opts");
-    const go = document.getElementById("go");
-    const out = document.getElementById("out");
-    const statusEl = document.getElementById("status");
-    const chips = document.getElementById("chips");
-    const outLabel = document.getElementById("outLabel");
 
+    <!-- Budget output -->
+    <div class="budget-wrap" id="budgetWrap" style="display:none">
+      <div class="out-header">
+        <div class="out-label">💰 Budget estimate</div>
+      </div>
+      <div id="budgetOut" class="out budget-out" aria-live="polite"></div>
+    </div>
+
+    <!-- Error output (no wrapper so it's always available) -->
+    <div class="out-wrap" id="errorWrap" style="display:none">
+      <div id="errOut" class="out error" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script>
+    const q           = document.getElementById("q");
+    const opts        = document.getElementById("opts");
+    const go          = document.getElementById("go");
+    const out         = document.getElementById("out");
+    const errOut      = document.getElementById("errOut");
+    const statusEl    = document.getElementById("status");
+    const chips       = document.getElementById("chips");
+    const copyBtn     = document.getElementById("copyBtn");
+    const weatherBanner = document.getElementById("weatherBanner");
+    const weatherText   = document.getElementById("weatherText");
+    const itineraryWrap = document.getElementById("itineraryWrap");
+    const budgetWrap    = document.getElementById("budgetWrap");
+    const budgetOut     = document.getElementById("budgetOut");
+    const errorWrap     = document.getElementById("errorWrap");
+
+    // Track plain-text response for copying
+    let _lastPlanText = "";
+
+    // ── 11. Example chip click handler ─────────────────────────────────────
+    document.querySelectorAll(".ex-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        q.value    = chip.dataset.q || "";
+        opts.value = chip.dataset.o || "";
+        q.focus();
+      });
+    });
+
+    // ── 9. Copy to clipboard ───────────────────────────────────────────────
+    copyBtn.addEventListener("click", async () => {
+      if (!_lastPlanText) return;
+      try {
+        await navigator.clipboard.writeText(_lastPlanText);
+        copyBtn.textContent = "Copied ✓";
+        copyBtn.classList.add("copied");
+        setTimeout(() => {
+          copyBtn.textContent = "Copy plan";
+          copyBtn.classList.remove("copied");
+        }, 2000);
+      } catch {
+        // Fallback for browsers that block clipboard API
+        const ta = document.createElement("textarea");
+        ta.value = _lastPlanText;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        copyBtn.textContent = "Copied ✓";
+        copyBtn.classList.add("copied");
+        setTimeout(() => {
+          copyBtn.textContent = "Copy plan";
+          copyBtn.classList.remove("copied");
+        }, 2000);
+      }
+    });
+
+    // ── Main fetch ─────────────────────────────────────────────────────────
     async function run() {
-      const query = q.value.trim();
+      const query   = q.value.trim();
       const options = opts.value.trim();
       if (!query && !options) {
-        outLabel.hidden = true;
-        out.className = "out error";
-        out.innerHTML = "";
-        out.textContent = "Enter a trip description and/or options (e.g. place and days in either box).";
+        showError("Enter a trip description and/or options (e.g. place and days in either box).");
         return;
       }
+
       go.disabled = true;
-      out.className = "out";
-      out.textContent = "";
-      out.innerHTML = "";
-      outLabel.hidden = true;
-      chips.innerHTML = "";
-      statusEl.className = "meta loading";
-      statusEl.textContent = "Crafting your itinerary…";
+      _lastPlanText = "";
+
+      // Reset UI
+      itineraryWrap.style.display  = "none";
+      budgetWrap.style.display     = "none";
+      errorWrap.style.display      = "none";
+      weatherBanner.style.display  = "none";
+      chips.innerHTML              = "";
+      out.className                = "out";
+      out.innerHTML                = "";
+      statusEl.className           = "meta loading";
+      statusEl.textContent         = "Crafting your itinerary…";
+
       try {
-        const res = await fetch("/api/plan", {
+        const res  = await fetch("/api/plan", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query, options }),
         });
         const data = await res.json().catch(() => ({}));
+
         if (!res.ok) {
           throw new Error(data.detail || res.statusText || "Request failed");
         }
-        statusEl.className = "meta";
+
+        statusEl.className   = "meta";
         statusEl.textContent = "Ready";
         statusEl.style.color = "var(--success)";
         setTimeout(() => {
           statusEl.textContent = "";
           statusEl.style.color = "";
         }, 2200);
+
+        // Info chips
         if (data.destination) {
           chips.innerHTML =
-            '<span class="chip"><strong>Place</strong> ' + escapeHtml(data.destination) + "</span>" +
-            '<span class="chip"><strong>Days</strong> ' + escapeHtml(String(data.days)) + "</span>" +
-            '<span class="chip"><strong>Transport</strong> ' + escapeHtml(data.transport || "—") + "</span>" +
-            '<span class="chip"><strong>Model</strong> ' + escapeHtml(data.model_id || "—") + "</span>";
+            chip("Place",     data.destination) +
+            chip("Days",      data.days) +
+            chip("Transport", data.transport || "—") +
+            chip("Model",     data.model_id  || "—");
         }
+
+        // Weather banner
+        if (data.weather_tip) {
+          weatherText.textContent  = data.weather_tip;
+          weatherBanner.style.display = "flex";
+        }
+
+        // Itinerary
         const body = data.response || "(empty response)";
+        _lastPlanText = body;
         out.className = "out it-html";
         out.innerHTML = formatItineraryHtml(body);
-        outLabel.hidden = false;
+        itineraryWrap.style.display = "block";
+
+        // Budget
+        if (data.budget) {
+          budgetOut.className = "out budget-out it-html";
+          budgetOut.innerHTML = formatItineraryHtml(data.budget);
+          budgetWrap.style.display = "block";
+        }
+
       } catch (e) {
-        statusEl.className = "meta";
+        statusEl.className   = "meta";
         statusEl.textContent = "";
-        outLabel.hidden = true;
-        out.className = "out error";
-        out.innerHTML = "";
-        out.textContent = e.message || String(e);
+        showError(e.message || String(e));
       } finally {
         go.disabled = false;
       }
+    }
+
+    function showError(msg) {
+      errOut.textContent      = msg;
+      errorWrap.style.display = "block";
+      itineraryWrap.style.display  = "none";
+      budgetWrap.style.display     = "none";
+      weatherBanner.style.display  = "none";
+    }
+
+    function chip(label, value) {
+      return `<span class="chip"><strong>${escapeHtml(label)}</strong> ${escapeHtml(String(value))}</span>`;
     }
 
     function escapeHtml(s) {
@@ -387,25 +590,23 @@
     }
 
     function formatItineraryHtml(plain) {
-      const lines = String(plain).split("\n");
-      return lines
-        .map((line) => {
-          const t = line.trim();
-          if (!t) return "<br />";
-          const esc = escapeHtml(line);
-          const em =
-            /^day\s+\d+/i.test(t) ||
-            /^morning\b/i.test(t) ||
-            /^afternoon\b/i.test(t) ||
-            /^evening\b/i.test(t) ||
-            /^•\s/.test(t);
-          const cls = em ? ' class="it-line it-em"' : ' class="it-line"';
-          return "<p" + cls + ">" + esc + "</p>";
-        })
-        .join("");
+      return String(plain).split("\n").map(line => {
+        const t   = line.trim();
+        if (!t)   return "<br />";
+        const esc = escapeHtml(line);
+        const em  =
+          /^day\s+\d+/i.test(t)    ||
+          /^morning\b/i.test(t)    ||
+          /^afternoon\b/i.test(t)  ||
+          /^evening\b/i.test(t)    ||
+          /^•\s/.test(t);
+        const cls = em ? ' class="it-line it-em"' : ' class="it-line"';
+        return `<p${cls}>${esc}</p>`;
+      }).join("");
     }
 
     go.addEventListener("click", run);
+
     function onEnterSubmit(ev) {
       if (ev.key === "Enter" && !ev.shiftKey) {
         ev.preventDefault();
